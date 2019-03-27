@@ -144,6 +144,8 @@ return [
     |
     */
 
-    'attributes' => [],
+    'attributes' => [
+        'captcha'=>'验证码',
+    ],
 
 ];
