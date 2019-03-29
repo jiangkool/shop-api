@@ -25,7 +25,7 @@ class HomeController extends Controller
 
     	if (auth()->attempt($data)) {
 
-    		return $this->response->array($request->user());
+    		return $this->response->array(['token'=>auth()->user()->createToken('MyApp')->accessToken]);
     	}else{
 
     		return $this->response->error(trans('auth.failed'),404);

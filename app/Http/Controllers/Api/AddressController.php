@@ -1,12 +1,17 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
 use App\Models\Address;
 use Illuminate\Http\Request;
+use Dingo\Api\Routing\Helpers;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\AddressRequest;
 
 class AddressController extends Controller
 {
+    use Helpers;
+
     /**
      * Display a listing of the resource.
      *
@@ -14,7 +19,7 @@ class AddressController extends Controller
      */
     public function index()
     {
-        //
+        return $this->response->array(auth()->user()->addresses);
     }
 
     /**
@@ -22,9 +27,26 @@ class AddressController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(AddressRequest $request)
     {
-        //
+        $user=$request->user();
+
+        $address=new Address([
+            'province'        => $request->province, 
+            'city'            => $request->city ,
+            'district'        => $request->district ,
+            'address_details' => $request->address_details
+        ]);
+
+        $address->user()->associate($user);
+
+        if($address->save()){
+
+            return $this->response->created();
+        }
+
+        return $this->response->noContent();
+
     }
 
     /**

@@ -9,4 +9,12 @@ $api->version('v1', [
 	$api->get('index','HomeController@index');
 	$api->post('user/login','HomeController@login');
 	$api->post('user/register','HomeController@register');
+
+	// passport 
+	$api->group(['middleware' => 'auth:api'],function($api){
+
+		$api->get('user/addresses','AddressController@index');
+		$api->post('user/addresses','AddressController@create');
+	});
+	
 });
