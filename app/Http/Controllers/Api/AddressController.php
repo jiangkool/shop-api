@@ -55,21 +55,11 @@ class AddressController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(AddressRequest $request,$id)
     {
-        //
+      
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Address  $address
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Address $address)
-    {
-        //
-    }
 
     /**
      * Show the form for editing the specified resource.
@@ -77,9 +67,9 @@ class AddressController extends Controller
      * @param  \App\Models\Address  $address
      * @return \Illuminate\Http\Response
      */
-    public function edit(Address $address)
+    public function edit($id,Address $address)
     {
-        //
+        return $this->response->array($address->find($id));
     }
 
     /**
@@ -89,9 +79,12 @@ class AddressController extends Controller
      * @param  \App\Models\Address  $address
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Address $address)
+    public function update(AddressRequest $request, $id,Address $address)
     {
-        //
+       $address=$address->where('id',$id)->first();
+       $this->authorize('own',$address);
+       $address->update($request->all());
+       return $this->response->noContent();
     }
 
     /**
@@ -100,8 +93,11 @@ class AddressController extends Controller
      * @param  \App\Models\Address  $address
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Address $address)
+    public function destroy(Request $request,$id)
     {
-        //
+        $address=Address::where('id',$id)->first();
+        $this->authorize('own',$address);
+        $address->delete();
+        return $this->response->noContent();
     }
 }

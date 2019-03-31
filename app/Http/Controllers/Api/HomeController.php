@@ -46,4 +46,9 @@ class HomeController extends Controller
     	}
     }
 
+    public function me()
+    {
+        return $this->response->array(auth()->user());
+    }
+
 }
