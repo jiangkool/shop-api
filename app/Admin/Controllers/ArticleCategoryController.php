@@ -110,7 +110,7 @@ class ArticleCategoryController extends Controller
 
         $form->text('title', '类别名称')->rules('required');
         $form->text('cat_alias', '别名')->rules('required');
-        $form->select('parent_id', '父级栏目')->options(ArticleCategory::selectOptions(null,'顶级栏目'))->rules('required');
+        $form->select('parent_id', '父级栏目')->options(ArticleCategory::selectOptions())->rules('required');
         $form->switch('show_in_nav', '是否导航显示')->default(1);
         $form->number('order', '排序')->default(0);
         $form->textarea('cat_desc', '分类描述');
