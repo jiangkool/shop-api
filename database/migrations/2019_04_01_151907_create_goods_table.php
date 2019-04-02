@@ -42,7 +42,7 @@ class CreateGoodsTable extends Migration
 
         Schema::create('goods_skus', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('title');
+            $table->string('sku_title');
             $table->unsignedInteger('goods_id');
             $table->foreign('goods_id')->references('id')->on('goods')->onDelete('cascade');
             $table->unsignedInteger('stock')->default(0);

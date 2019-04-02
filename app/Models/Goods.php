@@ -37,7 +37,7 @@ class Goods extends Model
 		'goods_images'=>'json'
     ];
 
-    public function goodsSkus()
+    public function goods_skus()
     {
     	return $this->hasMany(GoodsSku::class);
     }

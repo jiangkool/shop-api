@@ -16,4 +16,6 @@ Route::group([
     $router->resource('category', 'CategoryController');
     $router->resource('brands', 'BrandController');
     $router->resource('goods', 'GoodsController');
+
+    $router->get('/api/brands','GoodsController@getBrands');
 });
