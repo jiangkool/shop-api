@@ -83,20 +83,37 @@ class OrderController extends Controller
 
         $grid->id('Id');
         $grid->no('No');
-        $grid->user_id('User id');
-        $grid->product_type('Product type');
-        $grid->total_money('Total money');
-        $grid->address_id('Address id');
-        $grid->paid_at('Paid at');
-        $grid->payment_method('Payment method');
-        $grid->payment_no('Payment no');
-        $grid->refund_no('Refund no');
-        $grid->refund_status('Refund status');
-        $grid->ship_id('Ship id');
-        $grid->ship_status('Ship status');
-        $grid->bark('Bark');
-        $grid->closed('Closed');
-        $grid->extra('Extra');
+        $grid->user()->name('姓名');
+        $grid->product_type('商品类型')->display(function($product_type){
+            switch ($product_type) {
+               case 2:
+                    return '<span class="label label-default">团购商品</span>';
+                    break;
+                case 1:
+                    return '<span class="label label-default">抢购商品</span>';
+                    break;
+                default:
+                    return '<span class="label label-default">普通商品</span>';
+                    break;
+            }
+        });
+
+        $grid->total_money('总金额');
+        $grid->address('地址')->display(function($address){
+            return <<<ADD
+    {$address['province']}{$address['city']}{$address['district']}{$address['address_details']} {$address['addressee_name']} {$address['phone']}
+ADD;
+        });
+        $grid->paid_at('付款时间');
+        $grid->payment_method('方式');
+        $grid->payment_no('付款编号');
+        $grid->refund_no('退款编号');
+        $grid->refund_status('退款状态');
+        $grid->ship_id('物流');
+        //$grid->ship_status('物流状态');
+        $grid->bark('备注');
+        $grid->closed('关闭');
+        $grid->extra('额外');
         $grid->created_at('Created at');
         $grid->updated_at('Updated at');
 
@@ -144,21 +161,6 @@ class OrderController extends Controller
     {
         $form = new Form(new Order);
 
-        $form->text('no', 'No');
-        $form->number('user_id', 'User id');
-        $form->number('product_type', 'Product type');
-        $form->decimal('total_money', 'Total money');
-        $form->number('address_id', 'Address id');
-        $form->datetime('paid_at', 'Paid at')->default(date('Y-m-d H:i:s'));
-        $form->text('payment_method', 'Payment method');
-        $form->text('payment_no', 'Payment no');
-        $form->text('refund_no', 'Refund no');
-        $form->text('refund_status', 'Refund status');
-        $form->number('ship_id', 'Ship id');
-        $form->text('ship_status', 'Ship status');
-        $form->textarea('bark', 'Bark');
-        $form->switch('closed', 'Closed');
-        $form->textarea('extra', 'Extra');
 
         return $form;
     }

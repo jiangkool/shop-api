@@ -28,8 +28,7 @@ class CreateOrdersTable extends Migration
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->integer('product_type')->default(0);
             $table->decimal('total_money',10,2);
-            $table->unsignedInteger('address_id')->nullable();
-            $table->foreign('address_id')->references('id')->on('addresses')->onDelete('set null');
+            $table->text('address');
             $table->dateTime('paid_at')->nullable();
             $table->string('payment_method')->nullable();
             $table->string('payment_no')->nullable();
@@ -58,6 +57,7 @@ class CreateOrdersTable extends Migration
             $table->unsignedInteger('rating')->nullable();
             $table->text('review')->nullable();
             $table->timestamp('reviewed_at')->nullable();
+            $table->timestamps();
         });
     }
 

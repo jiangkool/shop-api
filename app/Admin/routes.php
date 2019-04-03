@@ -18,4 +18,6 @@ Route::group([
     $router->resource('goods', 'GoodsController');
 
     $router->get('/api/brands','GoodsController@getBrands');
+
+    $router->resource('order', 'OrderController');
 });

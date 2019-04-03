@@ -19,6 +19,10 @@ $api->version('v1', [
 		$api->get('user/addresses/{id}/edit','AddressController@edit');
 		$api->put('user/addresses/{id}','AddressController@update');
 		$api->delete('user/addresses/{id}','AddressController@destroy');
+
+		$api->get('order/index','OrderController@index');
+		$api->get('order/create','OrderController@create');
+		$api->post('order','OrderController@store');
 	});
 	
 });

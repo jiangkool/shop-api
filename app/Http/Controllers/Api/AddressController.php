@@ -32,6 +32,8 @@ class AddressController extends Controller
         $user=$request->user();
 
         $address=new Address([
+            'addressee_name'  => $request->addressee_name, 
+            'phone'           => $request->phone, 
             'province'        => $request->province, 
             'city'            => $request->city ,
             'district'        => $request->district ,
