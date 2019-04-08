@@ -130,5 +130,10 @@ class PaymentController extends Controller
         dispatch(new OrderPaid($order));
     }
 
+    public function wechatRefundNotify(Request $request)
+    {
+        
+    }
+
 
 }

@@ -33,13 +33,22 @@ class OrderController extends Controller
 		return $this->orderService->store($user,$order_items,$address_id,$product_type,$bark);
 	}
 
-
 	public function orderRefund(OrderRefundRequest $request,Order $order)
 	{
+		$this->authorize('own',$order);
+
 		$data['refund_reason']=$request->refund_reason;
 
 		$this->orderService->applyOrderRefund($order,$data);
 
+		return $this->response->noContent();
+	}
+
+	public function receipt(Request $request,Order $order)
+	{
+		$this->authorize('own',$order);
+		$this->orderService->receipt($order);
+		
 		return $this->response->noContent();
 	}
 

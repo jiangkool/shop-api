@@ -119,7 +119,11 @@ ADD;
                 return Order::$refundStatusMap[$refund_status];
             }
         });
-        $grid->ship_id('物流');
+        $grid->ship_status('物流状态')->display(function($ship_status){
+            if (!empty($ship_status)) {
+                return Order::$shipStatusMap[$ship_status];
+            }
+        });
         //$grid->ship_status('物流状态');
         $grid->bark('备注');
         $grid->closed('关闭')->display(function($item){

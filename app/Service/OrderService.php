@@ -76,5 +76,21 @@ class OrderService
    		]);
 	}
 
+	public function receipt(Order $order)
+	{
+		if ($order->ship_status!=Order::SHIP_STATUS_DELIVERED 
+			|| is_null($order->paid_at) 
+			|| $order->closed) 
+		{
+			throw new InternalException('订单状态不正确');
+		}
+
+		$order->update([
+			'ship_status'=>Order::SHIP_STATUS_RECEIVED
+		]);
+
+
+	}
+
 
 }

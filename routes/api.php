@@ -24,10 +24,17 @@ $api->version('v1', [
 		$api->get('order/index','OrderController@index')->name('order.index');
 		$api->get('order/create','OrderController@create')->name('order.create');
 		$api->post('order','OrderController@store')->name('order.store');
+		$api->post('order/{order}/receipt','OrderController@receipt')->name('order.receipt');
 
 		$api->post('order/{order}/alipay','PaymentController@alipayPayment')->name('alipay');
 
 		$api->post('order/{order}/refund','OrderController@orderRefund')->name('order_refund');
 	});
+
+	
 	
 });
+
+Route::post('payment/alipay/notify', 'PaymentController@alipayNotify')->name('payment.alipay.notify');
+Route::post('payment/wechat/notify', 'PaymentController@wechatNotify')->name('payment.wechat.notify');
+Route::post('payment/wechat/refund_notify', 'PaymentController@wechatRefundNotify')->name('payment.wechat.refund_notify');
