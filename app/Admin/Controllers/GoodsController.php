@@ -89,7 +89,8 @@ class GoodsController extends Controller
         $grid->brand()->name('所属品牌');
         $grid->category()->title('商品分类');
         $grid->click_count('点击量');
-        $grid->total_stock('库存');
+        $grid->sales_sum('销售量');
+       // $grid->total_stock('库存');
         $grid->comment_count('评论数');
         $grid->price('价格');
         $grid->keywords('关键词');
@@ -138,7 +139,6 @@ class GoodsController extends Controller
             return $is_new?"是":"否";
         });
         $grid->sort('排序');
-        $grid->sales_sum('销售量');
         $grid->created_at('Created at');
         $grid->updated_at('Updated at');
 

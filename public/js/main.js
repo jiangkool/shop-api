@@ -56,4 +56,16 @@ $(function(){
 		});
 		
 	})
+
+	$(".agree").click(function(){
+
+		swal({
+		  content: {
+		    element: "input"
+		  },
+		});
+
+	})
+
+
 })

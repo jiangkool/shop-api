@@ -11,7 +11,6 @@ class Goods extends Model
 		'brand_id',
 		'category_id',
 		'click_count',
-		'total_stock',
 		'comment_count',
 		'goods_cover',
 		'goods_images',

@@ -20,4 +20,6 @@ Route::group([
     $router->get('/api/brands','GoodsController@getBrands');
 
     $router->resource('order', 'OrderController');
+
+    $router->post('order/{order}/refund','OrderController@refundConfirmation')->name('admin.orders.handle_refund');
 });
