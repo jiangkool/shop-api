@@ -9,12 +9,20 @@ use App\Models\GoodsSku;
 use App\Exceptions\InternalException;
 use App\Jobs\OrderClosed;
 use Carbon\Carbon;
+use App\Models\Coupon;
 
 class OrderService
 {
-	public function store(User $user,$order_items,$address_id,$product_type,$bark)
+	public function store(User $user,$order_items,$address_id,$product_type,$bark,Coupon $coupon=null)
 	{
-		return \DB::transaction(function () use($user, $order_items, $address_id, $product_type, $bark) {
+		return \DB::transaction(function () use($user, $order_items, $address_id, $product_type, $bark,$coupon) {
+
+			if (!is_null($coupon)) {
+
+	   			if ($user->coupons()->where('coupon_id',$coupon->id)->where('used',1)->first()) {
+	   				throw new InternalException('该优惠券已使用');
+	   			}
+	   		}
 
    			$total_money=0;
    			$address=Address::find($address_id);
@@ -32,6 +40,7 @@ class OrderService
 					'address_details'=>$address->address_details
 				],
 				'bark'=>$bark,
+				'refund_status'=>Order::REFUND_STATUS_PENDING
 	   		]);
 
 	   		$order->user()->associate($user);
@@ -58,7 +67,25 @@ class OrderService
 	   			$total_money+=$item['amount']*$goods_sku->unit_price;
 	   		}
 
-	   		$order->update(['total_money' => $total_money]);
+	   		if (!is_null($coupon)) {
+
+	   			$total_money=$coupon->calculatedAmount($total_money);
+
+	   			$order->update([
+		   			'total_money' => $total_money,
+		   			'coupon_id' => $coupon->id
+	   			]);
+
+	   			$user->coupons()->updateExistingPivot($coupon->id,['used'=>1]);
+
+	   			$order->coupon->increment('used_amount');
+
+	   		}else{
+
+	   			$order->update([
+		   			'total_money' => $total_money
+	   			]);
+	   		}
 
 	   		dispatch(new OrderClosed($order,60));
 

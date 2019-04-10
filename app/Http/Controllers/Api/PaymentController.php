@@ -32,7 +32,7 @@ class PaymentController extends Controller
     public function alipayReturn()
     {
         try {
-            pay::alipay()->verify();
+            Pay::alipay()->verify();
         } catch (\Exception $e) {
             return $this->response->error('数据不正确！');
         }
@@ -43,11 +43,11 @@ class PaymentController extends Controller
     public function alipayNotify()
     {
         //验证阿里返回的的数据
-        $data=pay::alipay()->verify();
+        $data=Pay::alipay()->verify();
 
         //如果不是交易成功 或者 交易完成 状态 则不走后续流程
         if(!in_array($data->trade_status, ['TRADE_SUCCESS', 'TRADE_FINISHED'])) {
-            return pay::alipay()->success();
+            return Pay::alipay()->success();
         }
 
         // 校验订单是否存在
@@ -60,7 +60,7 @@ class PaymentController extends Controller
         // 已支付订单直接返回
         if ($order->paid_at) {
             // 返回数据给支付宝
-            return pay::alipay()->success();
+            return Pay::alipay()->success();
         }
 
         // 更新订单付款信息
@@ -72,9 +72,8 @@ class PaymentController extends Controller
         
         $this->afterPaid($order);
 
-        return pay::alipay()->success();
+        return Pay::alipay()->success();
     }
-
 
     public function wechatPayment(Order $order,Request $request)
     {
@@ -87,17 +86,17 @@ class PaymentController extends Controller
             'body'      => '支付订单：'.$order->no,
         ];
 
-        return pay::wechat()->app($order);
+        return Pay::wechat()->app($order);
     }
 
     public function wechatNotify()
     {
         //验证阿里返回的的数据
-        $data=pay::wechat()->verify();
+        $data=Pay::wechat()->verify();
 
         //如果不是交易成功 或者 交易完成 状态 则不走后续流程
         if($data->return_code!='SUCCESS') {
-            return pay::wechat()->success();
+            return Pay::wechat()->success();
         }
 
         // 校验订单是否存在
@@ -110,7 +109,7 @@ class PaymentController extends Controller
         // 已支付订单直接返回
         if ($order->paid_at) {
             // 返回数据给微信
-            return pay::wechat()->success();
+            return Pay::wechat()->success();
         }
 
         // 更新订单付款信息
@@ -122,17 +121,43 @@ class PaymentController extends Controller
 
         $this->afterPaid($order);
 
-        return pay::wechat()->success();
+        return Pay::wechat()->success();
     }
 
     public function afterPaid(Order $order)
     {
-        dispatch(new OrderPaid($order));
+        event(new OrderPaid($order));
     }
 
     public function wechatRefundNotify(Request $request)
     {
-        
+        // 微信失败响应xml
+        $failXml = '<xml><return_code><![CDATA[FAIL]]></return_code><return_msg><![CDATA[FAIL]]></return_msg></xml>';
+
+        // 验证微信服务器返回退款数据 true 为 refund 状态
+        $data=Pay::wechat()->verify(null, true);
+
+        if (!$order = Order::where('no', $data['out_trade_no'])->first()) {
+            return $failXml;
+        }
+        // 状态为成功 SUCCESS
+        if ($data['refund_status'] === 'SUCCESS') {
+            $order->update([
+                'refund_status'=>Order::REFUND_STATUS_SUCCESS
+            ]);
+
+        }else{
+
+            $extra = $order->extra;
+            $extra['refund_failed_code'] = $data['refund_status'];
+            $order->update([
+                'refund_status' => Order::REFUND_STATUS_FAILED,
+                'extra'         => $extra
+            ]);
+        }
+
+        return Pay::wechat()->success();
+
     }
 
 

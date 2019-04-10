@@ -22,7 +22,7 @@ class OrderPaidListener implements ShouldQueue
     {
         $order=$event->getOrder();
 
-        //再次验证是否支付
+        //再次验证是否支付 是否关闭
         if (!$order->paid_at || $order->closed) {
             return ;
         }

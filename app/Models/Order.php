@@ -23,6 +23,7 @@ class Order extends Model
 		'bark',
 		'closed',
 		'extra',
+        'coupon_id'
     ];
 
     protected $casts=[
@@ -112,5 +113,10 @@ class Order extends Model
         } while (self::query()->where('refund_no', $no)->exists());
 
         return $no;
+    }
+
+    public function coupon()
+    {
+        return $this->belongsTo(Coupon::class);
     }
 }

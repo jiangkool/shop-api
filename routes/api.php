@@ -29,6 +29,9 @@ $api->version('v1', [
 		$api->post('order/{order}/alipay','PaymentController@alipayPayment')->name('alipay');
 
 		$api->post('order/{order}/refund','OrderController@orderRefund')->name('order_refund');
+
+		$api->get('coupon','CouponController@index');
+		$api->get('user/coupon/{coupon}','CouponController@receiveCoupon');
 	});
 
 	

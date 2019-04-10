@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\OrderStoreRequest;
 use App\Models\Order;
+use App\Models\Coupon;
 use App\Exceptions\InternalException;
 use App\Http\Requests\OrderRefundRequest;
 use Dingo\Api\Routing\Helpers;
@@ -28,9 +29,14 @@ class OrderController extends Controller
 		$address_id=$request->address_id;
 		$product_type=$request->product_type;
 		$bark=$request->bark;
+		$coupon=null;
+		if (isset($request->coupon_id)) {
+			$coupon=Coupon::where('id',$request->coupon_id)->first();
+		}
+		
 		$order_items=json_decode($request->order_items,true);
 
-		return $this->orderService->store($user,$order_items,$address_id,$product_type,$bark);
+		return $this->orderService->store($user,$order_items,$address_id,$product_type,$bark,$coupon);
 	}
 
 	public function orderRefund(OrderRefundRequest $request,Order $order)

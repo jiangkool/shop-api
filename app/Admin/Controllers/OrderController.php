@@ -3,6 +3,7 @@
 namespace App\Admin\Controllers;
 
 use App\Models\Order;
+use App\Models\Coupon;
 use App\Http\Controllers\Controller;
 use Encore\Admin\Controllers\HasResourceActions;
 use Encore\Admin\Form;
@@ -111,6 +112,17 @@ class OrderController extends Controller
 ADD;
         });
         $grid->paid_at('付款时间');
+        $grid->coupon_id('优惠券')->display(function($id){
+            if(isset($id)){
+                $coupon=Coupon::find($id);
+                if ($coupon->type==Coupon::DISCOUNT) {
+                   return '《'.$coupon->title.'》'.Coupon::$typeMaps[$coupon->type].$coupon->type_value.'%'; 
+                }elseif($coupon->type==Coupon::REDUCE){
+                   return '《'.$coupon->title.'》'.Coupon::$typeMaps[$coupon->type].$coupon->type_value.' 元'; 
+                }
+                
+            }
+        });
         $grid->payment_method('方式');
         $grid->payment_no('付款编号');
         $grid->refund_no('退款编号');
