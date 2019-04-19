@@ -33,4 +33,9 @@ class Article extends Model
     {
     	return $this->belongsTo(\Encore\Admin\Auth\Database\Administrator::class,'admin_user_id','id');
     }
+
+    public function comments()
+    {
+        return $this->morphMany(Comment::class,'commentable');
+    }
 }

@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use Laravel\Scout\Searchable;
 use Illuminate\Database\Eloquent\Model;
 
 class Goods extends Model
 {
+	use Searchable;
+
     protected $fillable=[
 		'title',
 		'brand_id',
@@ -51,6 +54,11 @@ class Goods extends Model
     	return $this->belongsTo(Category::class);
     }
 
+    public function order_items()
+    {
+        return $this->hasMany(OrderItem::class);
+    }
+
     public function setGoodsImagesAttribute($goods_images)
     {
     	if (is_array($goods_images)) {
@@ -61,5 +69,17 @@ class Goods extends Model
     public function getGoodsImagesAttribute($goods_images)
     {
     	return json_decode($goods_images, true);
+    }
+
+    public function searchableAs()
+    {
+        return 'goods_index';
+    }
+
+    public function toSearchableArray()
+    {
+        $array = $this->toArray();
+
+        return $array;
     }
 }

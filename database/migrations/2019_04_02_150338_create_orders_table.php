@@ -54,8 +54,7 @@ class CreateOrdersTable extends Migration
             $table->foreign('goods_sku_id')->references('id')->on('goods_skus')->onDelete('set null');
             $table->unsignedInteger('amount')->default(0);
             $table->decimal('price',10,2);
-            $table->unsignedInteger('rating')->nullable();
-            $table->text('review')->nullable();
+            $table->unsignedInteger('rating')->default(0);
             $table->timestamp('reviewed_at')->nullable();
             $table->timestamps();
         });

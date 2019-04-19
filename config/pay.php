@@ -67,4 +67,5 @@ return [
         // 'hk' 时为东南亚节点
          'mode' => env('PAY_MODE',''),
     ],
+    'order_live_ttl'=>env('ORDER_LIVE_TTL',1800)
 ];

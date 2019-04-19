@@ -32,7 +32,11 @@ $api->version('v1', [
 
 		$api->get('coupon','CouponController@index');
 		$api->get('user/coupon/{coupon}','CouponController@receiveCoupon');
+
+		$api->post('order_item/{order_item}/comment','CommentController@addOrderItemComment');
 	});
+
+	$api->get('goods','GoodsController@index');
 
 	
 	

@@ -317,7 +317,7 @@ return [
     'extensions' => [
         'login-captcha' => [
          // set to false if you want to disable this extension
-         'enable' => true,
+         'enable' => false,
      ],
      'simditor' => [
         // Set to false if you want to disable this extension

@@ -10,7 +10,6 @@ class OrderItem extends Model
 		'amount',
 		'price',
 		'rating',
-		'review',
 		'reviewed_at',
     ];
 
@@ -33,5 +32,8 @@ class OrderItem extends Model
     	return $this->belongsTo(GoodsSku::class);
     }
 
-
+    public function comments()
+    {
+        return $this->morphMany(Comment::class,'commentable');
+    }
 }

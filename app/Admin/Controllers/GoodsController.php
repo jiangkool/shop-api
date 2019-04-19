@@ -141,7 +141,11 @@ class GoodsController extends Controller
         $grid->sort('排序');
         $grid->created_at('Created at');
         $grid->updated_at('Updated at');
-
+        $grid->actions(function ($actions) {
+            //$actions->disableDelete();
+            //$actions->disableEdit();
+            $actions->disableView();
+        });
         return $grid;
     }
 
@@ -154,29 +158,6 @@ class GoodsController extends Controller
     protected function detail($id)
     {
         $show = new Show(Goods::findOrFail($id));
-
-        $show->id('Id');
-        $show->title('Title');
-        $show->brand_id('Brand id');
-        $show->click_count('Click count');
-        $show->total_stock('Total stock');
-        $show->comment_count('Comment count');
-        $show->price('Price');
-        $show->keywords('Keywords');
-        $show->goods_cover('Goods cover');
-        $show->goods_images('Goods images');
-        $show->goods_remark('Goods remark');
-        $show->goods_content('Goods content');
-        $show->goods_type('Goods type');
-        $show->collect_sum('Collect sum');
-        $show->is_on_sale('Is on sale');
-        $show->is_free_shipping('Is free shipping');
-        $show->is_recommend('Is recommend');
-        $show->is_new('Is new');
-        $show->sort('Sort');
-        $show->sales_sum('Sales sum');
-        $show->created_at('Created at');
-        $show->updated_at('Updated at');
 
         return $show;
     }
@@ -231,7 +212,7 @@ class GoodsController extends Controller
 
     $form->saving(function (Form $form) {
         $form->model()->price = collect($form->input('goods_skus'))->where(Form::REMOVE_FLAG_NAME, 0)->min('unit_price') ?: 0;
-        $form->model()->total_stock=collect($form->input('goods_skus'))->sum('stock')?:0;
+       // $form->model()->total_stock=collect($form->input('goods_skus'))->sum('stock')?:0;
     });
        
         return $form;

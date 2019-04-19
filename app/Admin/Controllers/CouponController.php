@@ -102,7 +102,11 @@ class CouponController extends Controller
         });
         $grid->created_at('Created at');
         $grid->updated_at('Updated at');
-
+        $grid->actions(function ($actions) {
+            //$actions->disableDelete();
+            //$actions->disableEdit();
+            $actions->disableView();
+        });
         return $grid;
     }
 
@@ -115,24 +119,6 @@ class CouponController extends Controller
     protected function detail($id)
     {
         $show = new Show(Coupon::findOrFail($id));
-
-        $show->id('Id');
-        $show->title('Title');
-        $show->receive_type('Receive type');
-        $show->type('Type');
-        $show->min_condition_money('Min condition money');
-        $show->type_value('Type value');
-        $show->amount('Amount');
-        $show->receive_amount('Receive amount');
-        $show->used_amount('Used amount');
-        $show->start_time('Start time');
-        $show->end_time('End time');
-        $show->start_use_time('Start use time');
-        $show->end_use_time('End use time');
-        $show->status('Status');
-        $show->use_scope('Use scope');
-        $show->created_at('Created at');
-        $show->updated_at('Updated at');
 
         return $show;
     }

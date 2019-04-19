@@ -150,6 +150,11 @@ ADD;
         $grid->created_at('Created at');
         $grid->updated_at('Updated at');
 
+        $grid->actions(function ($actions) {
+            $actions->disableDelete();
+            $actions->disableEdit();
+            //$actions->disableView();
+        });
         return $grid;
     }
 

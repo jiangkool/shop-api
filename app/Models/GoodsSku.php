@@ -41,5 +41,6 @@ class GoodsSku extends Model
         }
         return $this->newQuery()->where('id', $this->id)->where('stock', '>=', $amount)->decrement('stock', $amount);
     }
+
     
 }

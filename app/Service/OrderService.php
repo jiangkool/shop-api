@@ -10,6 +10,7 @@ use App\Exceptions\InternalException;
 use App\Jobs\OrderClosed;
 use Carbon\Carbon;
 use App\Models\Coupon;
+use App\Models\OrderItem;
 
 class OrderService
 {
@@ -87,7 +88,7 @@ class OrderService
 	   			]);
 	   		}
 
-	   		dispatch(new OrderClosed($order,60));
+	   		dispatch(new OrderClosed($order,config('pay.order_live_ttl')));
 
 	   		return $order;
 
@@ -117,6 +118,28 @@ class OrderService
 		]);
 
 
+	}
+
+	public function addOrderItemComment($rating,$content,OrderItem $order_item)
+	{
+		if (!is_null($order_item->reviewed_at)) {
+    		throw new InternalException('已经评论过了','',403);
+    	}
+    	\DB::transaction(function () use ($order_item,$rating,$content) {
+
+    	    $order_item->comments()->create([
+				'content'=> $content,
+				'rating' => $rating
+			]);  
+
+			$order_item->update([
+				'reviewed_at'=>Carbon::now(),
+				'rating' => $rating
+			]);  
+
+			$order_item->goods->increment('comment_count');
+
+    	});	
 	}
 
 

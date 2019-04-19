@@ -24,4 +24,5 @@ Route::group([
     $router->post('order/{order}/refund','OrderController@refundConfirmation')->name('admin.orders.handle_refund');
 
     $router->resource('coupon', 'CouponController');
+    $router->resource('comments', 'CommentController');
 });
